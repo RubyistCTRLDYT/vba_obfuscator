@@ -1,4 +1,5 @@
 import os
+import io
 import sys
 import re
 import random
@@ -220,6 +221,31 @@ for s in subs:
 
 # Combine header, decrypt method and content
 new_content = header + decrypt_method + '\n' + new_content
+new_content = new_content.decode('ascii', 'ignore').encode('utf-8')
+
+# format new_content
+count = 1
+convert_str = u""
+num = 0
+for ch in new_content:
+    num = num + 1
+    count = count + 1
+
+    if num == len(new_content):
+        convert_str = convert_str + ch
+        break
+
+    if ch == '\n':
+        convert_str = convert_str + ch
+        count = 0
+        continue
+
+    if count > 100 and ch == ' ':
+        convert_str = convert_str + ch + u" _\n"
+        count = 0
+        # pass
+    else:
+        convert_str = convert_str + ch
 
 print
 
@@ -227,11 +253,15 @@ print
 print "[*] Showing obfuscated result..."
 pprint(obfuscated)
 
+# Print convert_str
+print "[*] Showing content result..."
+pprint(convert_str)
+
 print
 
 if yes_no('WARNING: Replace the file?') == True:
     f = open(sys.argv[1], "w+")
-    f.write(new_content)
+    f.write(convert_str)
     f.close()
 
 
