@@ -260,7 +260,7 @@ pprint(convert_str)
 print
 
 if yes_no('WARNING: Replace the file?') == True:
-    f = open(sys.argv[1], "w+")
+    f = open(sys.argv[1], "w+", encoding='utf-8')
     f.write(convert_str)
     f.close()
 
